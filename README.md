@@ -7,7 +7,7 @@ Create crypted self-executable bash scripts.
 ```bash
 cryptsh <script.sh> <name>
 ```
-Takes `script.sh`, encrypt it using openssl aes-256-cbc asking you to provide a password twice, and writes the resulting self-executable script as `name`.
+Takes `script.sh`, encrypt it using openssl aes-256-cbc asking you to provide a password twice, and writes the resulting self-executable script as `name` (or defult name: `secure`).
 
 ```bash
 $ cat exemple.sh
