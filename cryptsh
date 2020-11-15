@@ -4,7 +4,7 @@ dest="${2:-secure}"
 
 auto_exec='cat "$0"|sed "1,3d">"$0.s";openssl enc -d -aes-256-cbc -pbkdf2 -in "$0.s" -out "$0.d" && rm "$0.s" && . "$0.d" "$@";exit'
 
-vomit="$(echo "$auto_exec" | ./obfuscate)"
+vomit="$(echo "$auto_exec" | "$(dirname "$0")/obfuscate")"
 
 cat "$src" <(echo '[[ -z $KEEP ]] && rm "$0.d"') > tmp
 
