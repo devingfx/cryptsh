@@ -2,17 +2,9 @@
 src="$1"
 dest="${2:-secure}"
 
-auto_exec='cat "$0"|sed "1,3d">"$0.s";openssl enc -d -aes-256-cbc -pbkdf2 -in "$0.s" -out "$0.d" && rm "$0.s" && . "$0.d" "$@";exit'
-
+auto_exec='cat "$0"|sed "1,3d"|openssl enc -d -aes-256-cbc -pbkdf2|. /dev/stdin "$@";exit'
 vomit="$(echo "$auto_exec" | "$(dirname "$0")/obfuscate")"
 
-cat "$src" <(echo '[[ -z $KEEP ]] && rm "$0.d"') > tmp
-
-openssl enc -aes-256-cbc -salt -pbkdf2 -in tmp -out tmp.s
-
-#cat <(echo '#!/usr/bin/env bash'$'\n') <(echo "$auto_exec") tmp.s > "$dest"
-cat <(echo '#!/usr/bin/env bash') <(echo "$vomit") tmp.s > "$dest"
+cat <(echo '#!/usr/bin/env bash') <(echo "$vomit") <(openssl enc -aes-256-cbc -salt -pbkdf2 -in "$src") > "$dest"
 
 chmod ug+x "$dest"
-
-rm tmp tmp.s

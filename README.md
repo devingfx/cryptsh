@@ -4,10 +4,13 @@ Create crypted self-executable bash scripts.
 
 ## Usage
 
+### Create
+
 ```bash
 cryptsh <script.sh> <name>
 ```
-Takes `script.sh`, encrypt it using openssl aes-256-cbc asking you to provide a password twice, and writes the resulting self-executable script as `name` (or default name: `secure`).
+Takes `script.sh`, encrypt it using openssl aes-256-cbc asking you to provide a password twice, 
+and writes the resulting self-executable script as `name` (or default name: `secure`).
 
 ```bash
 $ cat exemple.sh
@@ -31,3 +34,10 @@ Secure script had this arguments: some args passed
 
 $
 ```
+
+### Extract
+If you know the password to execute the script, you can also use `decryptsh` to extract the original file without executing it:
+```bash
+decryptsh <file>
+```
+This will create a file at the same path with the same name finishing by `.d`.
