@@ -1,0 +1,40 @@
+#!/bin/bash
+
+src="$(cat)"
+curated="${src//[|<>\"\$0@;&]/}"
+#declare -p src curated
+list=($(echo "$curated" | sed 's/./\0\n/g' | sort -uR))
+#declare -p list
+
+declare -A ver rev
+i=0
+for c in {a..z}{A..Z}; do
+	list_i="${list[$i]}"
+#	declare -p list_i
+	if [[ -n "$list_i" ]]; then
+		ver["$c"]="$list_i"
+		rev["$list_i"]="$c"
+	fi
+	i=$((i+1))
+done
+#declare -p ver rev
+
+res="$(
+	echo "$src" | while read -rN1 c; do
+		rep="${rev[$c]}"
+		if [[ -n "$rep" ]]; then
+			printf '$%s' "$rep"
+		else
+			printf '%s' "$c"
+		fi
+done
+)"
+
+#declare -p res
+
+for c in "${!ver[@]}";do
+	printf '%s=%s ' "$c" "${ver[$c]}"
+done
+echo
+#declare -p res
+echo "$res"

@@ -1,0 +1,10 @@
+#!/bin/bash
+src="$1"
+
+cat "$src" | sed "1,3d" > "$src.s"
+
+openssl enc -d -aes-256-cbc -pbkdf2 -in "$src.s" -out "$src.dd"
+
+cat "$src.dd" | sed '/\[\[ -z $KEEP \]\] && rm "$0.d"/d' > "$src.d"
+
+rm "$src.s" "$src.dd"
